@@ -134,6 +134,7 @@ sub parse {
         elsif ($line =~ /torch\.class\(['"](\S+\.)?(\S+?)['"]\)/) {
             my $namespace = $1;
             my $class = $2;
+            $line = "";
             if ($namespace) {
                 $namespace = substr($namespace, 0, -1);
                 $line = "/// \@ingroup $namespace\n" . $line;
