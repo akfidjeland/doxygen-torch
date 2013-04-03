@@ -62,6 +62,8 @@ sub parse {
     my $in_block = 0;
     my $in_ml_comment = 0;
     my $in_function = 0;
+    my $in_verbatim = 0;
+    my $verbatim_name = q{};
     my $block_name = q{};
     my $result = q{};
 
@@ -72,6 +74,18 @@ sub parse {
      
     foreach my $line (<FH>) {
         chomp $line;
+
+        # detect beginning of code/verbatim block
+        if ($line =~ /\@(code|verbatim)/) {
+            $verbatim_name = "\@end$1";
+            $in_verbatim = 1;
+        }
+
+        # detect end of code/verbatim block
+        if ($in_verbatim == 1 and $line =~ /$verbatim_name/) {
+            $verbatim_name = q{};
+            $in_verbatim = 0;
+        }
 
         # detect beginning of multiline comment
         if ($line =~ /--\[\[\!/) {
@@ -92,14 +106,18 @@ sub parse {
             }
         }
 
-        # skip normal comments
-        next if $line =~ /^\s*--[^!]/;
-        # remove end of line comments
-        $line =~ s/--[^!].*//;
+        if ($in_verbatim == 0) {
+            # skip normal comments
+            next if $line =~ /^\s*--[^!]/;
+            # remove end of line comments
+            $line =~ s/--[^!].*//;
+        }
         # skip comparison
         next if $line =~ /==/;
-        # translate to doxygen mark
-        $line =~ s{$mark}{///};
+        if ($in_verbatim == 0) {
+            # translate to doxygen mark
+            $line =~ s{$mark}{///};
+        }
 
         if ($line =~ m{^\s*///}) {
             $result .= "$line\n";
