@@ -60,6 +60,7 @@ sub parse {
     my $input = shift;
 
     my $in_block = 0;
+    my $in_ml_comment = 0;
     my $in_function = 0;
     my $block_name = q{};
     my $result = q{};
@@ -72,10 +73,24 @@ sub parse {
     foreach my $line (<FH>) {
         chomp $line;
 
-        # include empty lines
-        if ($line =~ m{^\s*$}) {
-            $result .= "\n"
+        # detect beginning of multiline comment
+        if ($line =~ /--\[\[\!/) {
+            $in_ml_comment = 1;
+            $line =~ s{--\[\[\!}{}
         }
+
+        if ($in_ml_comment == 1) {
+            $line = '/// ' . $line;
+            if ($line =~ /\]\]/) {
+                $in_ml_comment = 0;
+            }
+        } else {
+            # include empty lines
+            if ($line =~ m{^\s*$}) {
+                $result .= "\n"
+            }
+        }
+
         # skip normal comments
         next if $line =~ /^\s*--[^!]/;
         # remove end of line comments
