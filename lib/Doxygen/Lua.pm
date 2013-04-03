@@ -83,6 +83,7 @@ sub parse {
             $line = '/// ' . $line;
             if ($line =~ /\]\]/) {
                 $in_ml_comment = 0;
+                $line =~ s{(--)?\]\]}{}
             }
         } else {
             # include empty lines
