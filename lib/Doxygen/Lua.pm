@@ -63,6 +63,7 @@ sub parse {
     my $in_ml_comment = 0;
     my $in_function = 0;
     my $in_verbatim = 0;
+    my $in_var = 0;
     my $verbatim_name = q{};
     my $block_name = q{};
     my $result = q{};
@@ -112,11 +113,17 @@ sub parse {
             # remove end of line comments
             $line =~ s/--[^!].*//;
         }
+
         # skip comparison
         next if $line =~ /==/;
         if ($in_verbatim == 0) {
             # translate to doxygen mark
             $line =~ s{$mark}{///};
+        }
+
+        # detect @var
+        if ($line =~ /\/\/\/\s*\@var/) {
+            $in_var = 1;
         }
 
         if ($line =~ m{^\s*///}) {
@@ -181,8 +188,9 @@ sub parse {
             $block_name = q{};
             $in_block = 0;
         }
-        # variables
-        elsif ($in_function == 0 && $line =~ /=/) {
+
+        elsif ($in_var == 1 && ($line =~ /=/ || $line =~ /^\s*local\s/)) {
+            $in_var = 0;
             $line =~ s/(?=\S)/$block_name./ if $block_name;
             $line =~ s{,?(\s*)(?=///|$)}{;$1};
             $result .= "$line\n";
