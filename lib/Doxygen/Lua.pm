@@ -88,6 +88,16 @@ sub parse {
         if ($line =~ m{^\s*///}) {
             $result .= "$line\n";
         }
+        # member function start
+        elsif ($line =~ /^function\s*(\S*):(\S*)\(/) {
+            my $class  = $1;
+            my $fn  = $2;
+            $in_function = 1;
+            $line = "/// \@memberof $class\n" . $line;
+            $line .= q{;};
+            $line =~ s/:/-/;
+            $result .= "$line\n";
+        }
         # function start
         elsif ($line =~ /^function/) {
             $in_function = 1;
