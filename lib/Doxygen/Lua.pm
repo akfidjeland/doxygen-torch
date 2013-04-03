@@ -95,8 +95,8 @@ sub parse {
             $line =~ s/:/-/;
             $result .= "$line\n";
         }
-	#local function start
-   	elsif ($line =~ /^local.+function/) {
+        #local function start
+        elsif ($line =~ /^local.+function/) {
             $in_function = 1;
             $line .= q{;};
             $line =~ s/function\s+/function-/;
