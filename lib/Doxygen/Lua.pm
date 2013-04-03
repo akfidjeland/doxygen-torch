@@ -122,6 +122,19 @@ sub parse {
         if ($line =~ m{^\s*///}) {
             $result .= "$line\n";
         }
+
+        # torch class
+        elsif ($line =~ /torch\.class\(['"](\S+\.)?(\S+?)['"]\)/) {
+            my $namespace = $1;
+            my $class = $2;
+            if ($namespace) {
+                $namespace = substr($namespace, 0, -1);
+                $line = "/// \@ingroup $namespace\n" . $line;
+            }
+            $line = "/// \@class $class\n" . $line;
+            $result .= "$line\n";
+        }
+
         # member function start
         elsif ($line =~ /^function\s*(\S*):(\S*)\(/) {
             my $class  = $1;
