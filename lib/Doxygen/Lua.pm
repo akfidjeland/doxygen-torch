@@ -132,8 +132,16 @@ sub parse {
             $line =~ s/:/-/;
             $result .= "$line\n";
         }
+
         # function start
-        elsif ($line =~ /^function/) {
+        elsif ($line =~ /^function\s*([^(]+?\.)?/) {
+            # add group/package membership.
+            # extraneous @ingroup directives have no effect.
+            my $group = $1;
+            if ($group) {
+                $group = substr($group, 0, -1);
+                $line = "/// \@ingroup $group\n" . $line;
+            }
             $in_function = 1;
             $line .= q{;};
             $line =~ s/:/-/;
