@@ -67,6 +67,7 @@ sub parse {
     my $verbatim_name = q{};
     my $block_name = q{};
     my $result = q{};
+    my %classes = ();
 
     my $mark = $self->mark;
      
@@ -134,6 +135,7 @@ sub parse {
         elsif ($line =~ /torch\.class\(['"](\S+\.)?(\S+?)['"]\)/) {
             my $namespace = $1;
             my $class = $2;
+            $classes{$class} = 1;
             $line = "";
             if ($namespace) {
                 $namespace = substr($namespace, 0, -1);
@@ -158,12 +160,14 @@ sub parse {
 
         # function start
         elsif ($line =~ /^function\s*([^(]+?\.)?/) {
-            # add group/package membership.
+            # add package/class membership.
             # extraneous @ingroup directives have no effect.
             my $group = $1;
             if ($group) {
                 $group = substr($group, 0, -1);
-                $line = "/// \@ingroup $group\n" . $line;
+                my $static = $classes{$group};
+                my $grouptype = $static ? 'memberof' : 'ingroup';
+                $line = "/// \@$grouptype $group\n" . $line;
             }
             $in_function = 1;
             $line .= q{;};
