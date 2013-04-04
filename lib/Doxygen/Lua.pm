@@ -123,13 +123,15 @@ sub parse {
             $result .= "$line\n";
         }
         # member function start
-        elsif ($line =~ /^function\s*(\S*):(\S*)\(/) {
-            my $class  = $1;
-            my $fn  = $2;
+        elsif ($line =~ /^function\s*(\S*):(\S*)\((.*)\)\s*$/) {
+            my $class = $1;
+            my $fn = $2;
+            my $args = $3;
+            if ($args) {
+                $args = ', ' . $args
+            }
             $in_function = 1;
-            $line = "/// \@memberof $class\n" . $line;
-            $line .= q{;};
-            $line =~ s/:/-/;
+            $line = "/// \@memberof $class\nfunction $class-$fn(self$args);";
             $result .= "$line\n";
         }
         # function start
