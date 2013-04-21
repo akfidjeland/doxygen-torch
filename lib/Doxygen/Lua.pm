@@ -1,4 +1,4 @@
-package Doxygen::Lua;
+#!/usr/bin/env perl
 
 use warnings;
 use strict;
@@ -17,12 +17,6 @@ our $VERSION = '0.04';
 
 =head1 SYNOPSIS
 
-    use Doxygen::Lua;
-    my $p = Doxygen::Lua->new;
-    print $p->parse($input);
-
-=head1 DESCRIPTION
-
 A script named "lua2dox" will be installed. Then modify your Doxyfile as below:
 
     FILTER_PATTERNS = *.lua=../bin/lua2dox
@@ -31,24 +25,6 @@ That's all!
 
 =head1 SUBROUTINES/METHODS
 
-=head2 new
-
-This function will create a Doxygen::Lua object.
-
-=cut
-
-sub new {
-    my ($class, %args) = @_;
-    my $self = bless \%args, $class;
-    $self->_init;
-    return $self;
-}
-
-sub _init {
-    my $self = shift;
-    $self->{mark} = '--!';
-}
-
 =head2 parse
 
 This function will parse the given input file and return the result.
@@ -56,7 +32,7 @@ This function will parse the given input file and return the result.
 =cut
 
 sub parse {
-    my $self = shift;
+
     my $input = shift;
 
     my $in_block = 0;
@@ -69,7 +45,7 @@ sub parse {
     my $result = q{};
     my %classes = ();
 
-    my $mark = $self->mark;
+    my $mark = '--!';
      
     open FH, "<$input"
         or die "Can't open $input for reading: $!";
@@ -208,17 +184,6 @@ sub parse {
     return $result;
 }
 
-=head2 mark
-
-This function will set the mark style. The default value is "--!".
-
-=cut
-
-sub mark {
-    my ($self, $value) = @_;
-    $self->{mark} = $value if $value;
-    return $self->{mark};
-}
 
 =head1 AUTHOR
 
@@ -274,4 +239,4 @@ See http://dev.perl.org/licenses/ for more information.
 
 =cut
 
-1; # End of Doxygen::Lua
+print parse($ARGV[0]);

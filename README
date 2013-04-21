@@ -1,9 +1,8 @@
 Doxygen-Lua
 
-Doxygen::Lua is a preprocessor to make Doxygen support Lua syntax.
+The script "lua2dox" is a preprocessor to make Doxygen support Lua syntax.
 
-A script named "lua2dox" is shipped with this module. Just simply
-modify your Doxyfile as below:
+Just simply modify your Doxyfile as below:
 
     FILTER_PATTERNS = *.lua=/path/to/your/lua2dox
 
@@ -17,19 +16,15 @@ Run "doxygen" in the "example" directory can generate a example documentation.
 
 INSTALLATION
 
-To install this module, run the following commands:
+To install this module, perform the regular cmake build routine:
 
-	perl Makefile.PL
+	mkdir build
+	cd build
+	cmake ..
 	make
-	make test
 	make install
 
 SUPPORT AND DOCUMENTATION
-
-After installing, you can find documentation for this module with the
-perldoc command.
-
-    perldoc Doxygen::Lua
 
 You can also look for information at:
 
