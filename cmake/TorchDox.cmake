@@ -4,7 +4,17 @@ MACRO(ADD_TORCH_DOX dstdir section title rank)
 
         ADD_CUSTOM_TARGET(documentation-dox ALL COMMENT "Built documentation")
 
-        CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+        # If there's a local Doxyfile.in, use that; otherwise use the one
+        # that's packaged with lua2dox.
+        FIND_FILE(DOXYFILE
+            Doxyfile.in
+            PATHS ${CMAKE_CURRENT_SOURCE_DIR} ${Lua2Dox_INSTALL_PREFIX}/${Lua2Dox_INSTALL_CMAKE_SUBDIR}
+            NO_DEFAULT_PATH
+            DOC "Doxyfile.in: configuration for Doxygen"
+        )
+
+        # Need to set the source directory, since we're building out-of-source
+        CONFIGURE_FILE(${DOXYFILE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
 
         # Files go in the folder 'doc/html'
         ADD_CUSTOM_TARGET (${dstdir}-doxygen

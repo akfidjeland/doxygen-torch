@@ -4,6 +4,7 @@ INSTALL(
 	FILES
 		cmake/Lua2DoxConfig.cmake
 		cmake/TorchDox.cmake
+		cmake/Doxyfile.in
 	DESTINATION
 		share/cmake/lua2dox
 )
