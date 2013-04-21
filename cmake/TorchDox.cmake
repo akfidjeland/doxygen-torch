@@ -1,0 +1,31 @@
+MACRO(ADD_TORCH_DOX dstdir section title rank)
+
+    IF(DOXYGEN_FOUND AND LUA2DOX)
+
+        ADD_CUSTOM_TARGET(documentation-dox ALL COMMENT "Built documentation")
+
+        CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+
+        # Files go in the folder 'doc/html'
+        ADD_CUSTOM_TARGET (${dstdir}-doxygen
+            ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            COMMENT "Generating API documentation with Doxygen" VERBATIM
+        )
+        INSTALL(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/doc/html/" DESTINATION "${Torch_INSTALL_HTML_SUBDIR}/${dstdir}")
+        ADD_DEPENDENCIES(documentation-dox ${dstdir}-doxygen)
+
+        # Update the main index
+        ADD_CUSTOM_TARGET(${dstdir}-dok-index
+          ${Torch_SOURCE_LUA} "${Torch_SOURCE_CMAKE}/dok/dokindex.lua" "${Torch_SOURCE_PKG}/dok/init.lua" "${TORCH_DOK_HTML_TEMPLATE}" "${CMAKE_BINARY_DIR}/dokindex.lua" "${Torch_INSTALL_SHARE}/torch/dokindex.lua" "${CMAKE_BINARY_DIR}/dok/index.txt" "${CMAKE_BINARY_DIR}/doc/html/index.html" "${dstdir}" "${section}" "${title}" "${rank}"
+          DEPENDS ${Torch_SOURCE_LUA} doc
+          "${Torch_SOURCE_CMAKE}/dok/dokindex.lua"
+          "${Torch_SOURCE_PKG}/dok/init.lua")
+
+        ADD_DEPENDENCIES(documentation-dox ${distdir}-dok-index)
+            
+    ELSE()
+        MESSAGE(WARNING "Failed to generate documentation due to missing tools. See earlier warnings")
+    ENDIF()
+
+ENDMACRO(ADD_TORCH_DOX)
