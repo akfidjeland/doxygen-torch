@@ -108,7 +108,7 @@ sub parse {
         }
 
         # torch class
-        elsif ($line =~ /torch\.class\(['"](\S+\.)?(\S+?)['"]\)/) {
+        elsif ($line =~ /torch\.class\(['"]([^'".]+\.)?([^'"]+?)['"][ ,)]/) {
             my $namespace = $1;
             my $class = $2;
             $classes{$class} = 1;
