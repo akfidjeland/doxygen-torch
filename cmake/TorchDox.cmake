@@ -27,12 +27,13 @@ MACRO(ADD_TORCH_DOX dstdir section title rank)
 
         # Update the main index
         ADD_CUSTOM_TARGET(${dstdir}-dok-index
-          ${Torch_SOURCE_LUA} "${Torch_SOURCE_CMAKE}/dok/dokindex.lua" "${Torch_SOURCE_PKG}/dok/init.lua" "${TORCH_DOK_HTML_TEMPLATE}" "${CMAKE_BINARY_DIR}/dokindex.lua" "${Torch_INSTALL_SHARE}/torch/dokindex.lua" "${CMAKE_BINARY_DIR}/dok/index.txt" "${CMAKE_BINARY_DIR}/doc/html/index.html" "${dstdir}" "${section}" "${title}" "${rank}"
-          DEPENDS ${Torch_SOURCE_LUA} doc
+          ${Torch_SOURCE_LUA} "${Torch_SOURCE_CMAKE}/dok/dokindex.lua" "${Torch_SOURCE_PKG}/dok/init.lua" "${TORCH_DOK_HTML_TEMPLATE}" "${CMAKE_BINARY_DIR}/dokindex.lua" "${Torch_INSTALL_SHARE}/torch/dokindex.lua" "${CMAKE_BINARY_DIR}/dok/index.txt" "${CMAKE_BINARY_DIR}/html/index.html" "${dstdir}" "${section}" "${title}" "${rank}"
+          DEPENDS ${Torch_SOURCE_LUA} ${dstdir}-doxygen
           "${Torch_SOURCE_CMAKE}/dok/dokindex.lua"
-          "${Torch_SOURCE_PKG}/dok/init.lua")
-
-        ADD_DEPENDENCIES(documentation-dox ${distdir}-dok-index)
+          "${Torch_SOURCE_PKG}/dok/init.lua"
+          COMMENT "Generating main documentation index")
+        INSTALL(DIRECTORY "${CMAKE_BINARY_DIR}/html/" DESTINATION "${Torch_INSTALL_HTML_SUBDIR}")
+        ADD_DEPENDENCIES(documentation-dox ${dstdir}-dok-index)
             
     ELSE()
         MESSAGE(WARNING "Failed to generate documentation due to missing tools. See earlier warnings")
