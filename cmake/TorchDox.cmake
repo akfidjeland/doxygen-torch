@@ -13,6 +13,7 @@ MACRO(ADD_TORCH_DOX dstdir section title rank)
             DOC "Doxyfile.in: configuration for Doxygen"
         )
 
+        SET(PROJECT_NAME ${title})
         # Need to set the source directory, since we're building out-of-source
         CONFIGURE_FILE(${DOXYFILE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
 
