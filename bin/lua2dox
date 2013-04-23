@@ -68,19 +68,19 @@ sub parse {
         # detect beginning of multiline comment
         if ($line =~ /--\[\[\!/) {
             $in_ml_comment = 1;
-            $line =~ s{--\[\[\!}{}
+            $line =~ s{--\[\[\!}{};
         }
 
         if ($in_ml_comment == 1) {
             $line = '/// ' . $line;
             if ($line =~ /\]\]/) {
                 $in_ml_comment = 0;
-                $line =~ s{(--)?\]\]}{}
+                $line =~ s{(--)?\]\]}{};
             }
         } else {
             # include empty lines
             if ($line =~ m{^\s*$}) {
-                $result .= "\n"
+                $result .= "\n";
             }
         }
 
@@ -127,7 +127,7 @@ sub parse {
             my $fn = $2;
             my $args = $3;
             if ($args) {
-                $args = ', ' . $args
+                $args = ', ' . $args;
             }
             $in_function = 1;
             $line = "/// \@memberof $class\nfunction $class-$fn(self$args);";
