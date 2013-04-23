@@ -38,8 +38,9 @@ sub parse {
     my $in_block = 0;
     my $in_ml_comment = 0;
     my $in_function = 0;
+    my $in_member_function = q{};
     my $in_verbatim = 0;
-    my $in_var = 0;
+    my $in_global_var = 0;
     my $verbatim_name = q{};
     my $block_name = q{};
     my $result = q{};
@@ -100,7 +101,7 @@ sub parse {
 
         # detect @var
         if ($line =~ /\/\/\/\s*\@var/) {
-            $in_var = 1;
+            $in_global_var = 1;
         }
 
         if ($line =~ m{^\s*///}) {
@@ -130,8 +131,13 @@ sub parse {
                 $args = ', ' . $args;
             }
             $in_function = 1;
+            $in_member_function = $class;
             $line = "/// \@memberof $class\nfunction $class-$fn(self$args);";
-            $result .= "$line\n";
+            $result .= <<END
+$line
+class $class {
+    public:
+END
         }
 
         # function start
@@ -157,10 +163,16 @@ sub parse {
             $line =~ s/function\s+/function-/;
             $result .= "$line\n";
         }
+
         # function end
         elsif ($in_function == 1 && $line =~ /^end/) {
             $in_function = 0;
+            if($in_member_function ne q{}) {
+                $in_member_function = q{};
+                $result .= "};";
+            }
         }
+
         # block start
         elsif ($in_function == 0 && $line =~ /^(\S+)\s*=\s*{/ && $line !~ /}/) {
             $block_name = $1; 
@@ -172,11 +184,18 @@ sub parse {
             $in_block = 0;
         }
 
-        elsif ($in_var == 1 && ($line =~ /=/ || $line =~ /^\s*local\s/)) {
-            $in_var = 0;
+        # global variable
+        elsif ($in_global_var == 1 && ($line =~ /=/ || $line =~ /^\s*local\s/)) {
+            $in_global_var = 0;
             $line =~ s/(?=\S)/$block_name./ if $block_name;
             $line =~ s{,?(\s*)(?=///|$)}{;$1};
             $result .= "$line\n";
+        }
+
+        # member variable
+        elsif ($in_member_function ne q{} && ($line =~ /self\.(\S+)\s*=/)) {
+            my $member_var = $1;
+            $result .= "$member_var;\n";
         }
     }
 
