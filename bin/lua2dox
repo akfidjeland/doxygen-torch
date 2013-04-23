@@ -123,7 +123,8 @@ sub parse {
         }
 
         # member function start
-        elsif ($line =~ /^function\s*(\S+)[:.](\S+)\((.*)\)\s*$/) {
+        elsif ($line =~ /^function\s*(\S+):(\S+)\((.*)\)\s*$/ or
+			$line =~ /^function\s*(\S+).__init\((.*)\)\s*$/) {
             my $class = $1;
             my $fn = $2;
             my $args = $3;
@@ -193,7 +194,7 @@ END
         }
 
         # member variable
-        elsif ($in_member_function ne q{} && ($line =~ /self\.(\S+)\s*=/)) {
+        elsif ($in_member_function ne q{} && ($line =~ /^\s*self\.(\S+)\s*=/)) {
             my $member_var = $1;
             $result .= "$member_var;\n";
         }
