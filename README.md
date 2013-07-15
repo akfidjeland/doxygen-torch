@@ -170,7 +170,7 @@ containing it is documented.
 
 Simply precede the variable with a documentation block. If the variable is a
 member variable it will be added to the appropriate class' documentation. This
-relised on the convention that ``self`` is used to refer to the class instance.
+relies on the convention that ``self`` is used to refer to the class instance.
 
 ### Other/best practice
 
