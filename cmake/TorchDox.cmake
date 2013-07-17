@@ -23,7 +23,8 @@ MACRO(ADD_TORCH_DOX dstdir section title rank)
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
             COMMENT "Generating API documentation with Doxygen" VERBATIM
         )
-        INSTALL(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/doc/html/" DESTINATION "${Torch_INSTALL_HTML_SUBDIR}/${dstdir}")
+        INSTALL(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/doc/html/"
+			DESTINATION "${Torch_INSTALL_PREFIX}/${Torch_INSTALL_HTML_SUBDIR}/${dstdir}")
         ADD_DEPENDENCIES(documentation-dox ${dstdir}-doxygen)
 
         # Update the main index
@@ -33,7 +34,17 @@ MACRO(ADD_TORCH_DOX dstdir section title rank)
           "${Torch_SOURCE_CMAKE}/dok/dokindex.lua"
           "${Torch_SOURCE_PKG_PATH}/dok/init.lua"
           COMMENT "Generating main documentation index")
-        INSTALL(DIRECTORY "${CMAKE_BINARY_DIR}/html/" DESTINATION "${Torch_INSTALL_HTML_SUBDIR}")
+        INSTALL(DIRECTORY "${CMAKE_BINARY_DIR}/html/"
+            DESTINATION "${Torch_INSTALL_PREFIX}/${Torch_INSTALL_HTML_SUBDIR}")
+
+        # torch-rocks does not install 'share' so we need to manually update the index files
+        INSTALL(FILES ${CMAKE_BINARY_DIR}/dokindex.lua
+            DESTINATION ${Torch_INSTALL_SHARE}/torch)
+        INSTALL(FILES ${CMAKE_BINARY_DIR}/html/index.html
+            DESTINATION ${Torch_INSTALL_SHARE}/${Torch_INSTALL_HTML_SUBDIR})
+        INSTALL(FILES ${CMAKE_BINARY_DIR}/dok/index.txt
+            DESTINATION ${Torch_INSTALL_SHARE}/${Torch_INSTALL_DOK_SUBDIR})
+
         ADD_DEPENDENCIES(documentation-dox ${dstdir}-dok-index)
             
     ELSE()
