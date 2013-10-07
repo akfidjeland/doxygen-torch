@@ -11,23 +11,33 @@ with doxygen-torch into the regular cmake-based torch build process.
 
 ## Installation
 
+### On OS X
+
+Doxygen-torch can be installed via [Homewbrew](http://brew.sh/) using our home-made head-only formula:
+
+```bash
+brew install --HEAD https://raw.github.com/akfidjeland/doxygen-torch/master/doxygen-torch.rb
+```
+
+This will also install doxygen if you do not already have it.
+
+### Other OSs
+
 Doxygen is required, which can be installed using your system's regular package
-manager, e.g.
-
-	brew install doxygen
-
-on OSX.
+manager.
 
 ``doxygen-torch`` should be downloaded from [@akfidjeland's public
 repo](https://github.com/akfidjeland/doxygen-torch) and can be installed using
 the normal cmake-based build process:
-		
-	git clone https://github.com/akfidjeland/doxygen-torch
-	cd doxygen-torch
-	mkdir build
-	cd build
-	cmake ..
-	make install
+
+```bash
+git clone https://github.com/akfidjeland/doxygen-torch
+cd doxygen-torch
+mkdir build
+cd build
+cmake ..
+make install
+```
 
 ## Documenting your code
 
