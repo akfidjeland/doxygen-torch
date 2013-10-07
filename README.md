@@ -69,6 +69,8 @@ Some useful directives and documentation patterns can be found in the following 
 
 ### Functions
 
+<b>Caveat:</b> to be documented, function declaration must <b>not</b> be preceded by any white space or indentation. The `f` of the keyword `function` (and its matching `end` several lines below) must be the first character of the line.
+
 Functions can be simply preceded by a comment block as above. The first line
 will be used as a summary in brief documentation listings, while the remainder
 of the block provides more detail. Parameters can be documented using
