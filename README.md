@@ -13,13 +13,19 @@ with doxygen-torch into the regular cmake-based torch build process.
 
 ### On OS X
 
-Doxygen-torch can be installed via [Homewbrew](http://brew.sh/) using our home-made head-only formula:
+Doxygen-torch can be installed via [Homewbrew](http://brew.sh/) using our home-made formula:
 
 ```bash
-brew install --HEAD https://raw.github.com/akfidjeland/doxygen-torch/master/doxygen-torch.rb
+brew install https://raw.github.com/akfidjeland/doxygen-torch/master/doxygen-torch.rb
 ```
 
 This will also install doxygen if you do not already have it.
+
+If you already had an old torch-rocks-based versoin of doxygen-torch that you did not uninstall first, you might see an error. In this case, it suffices to overwrite the old install with:
+
+```
+brew link --overwrite doxygen-torch
+```
 
 ### Other OSs
 
