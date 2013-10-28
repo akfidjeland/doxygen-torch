@@ -3,9 +3,9 @@
 require 'formula'
 
 class DoxygenTorch < Formula
-  url 'https://raw.github.com/akfidjeland/doxygen-torch/tarball/v0.1.3'
+  url 'https://github.com/akfidjeland/doxygen-torch/archive/v0.1.3.tar.gz'
   version "0.1.3"
-  sha1 '735b1d0625781a6591e071312ba8757a6fe8a49c'
+  sha1 '5faed8bb6b81d3396e702beef5017addf5cffff1'
   homepage 'https://github.com/akfidjeland/doxygen-torch'
   head 'https://github.com/akfidjeland/doxygen-torch.git'
 
