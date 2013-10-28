@@ -5,7 +5,7 @@ require 'formula'
 class DoxygenTorch < Formula
   url 'https://codeload.github.com/akfidjeland/doxygen-torch/tar.gz/v0.1.3'
   version "0.1.3"
-  sha1 '5faed8bb6b81d3396e702beef5017addf5cffff1'
+  sha1 '8c9bf1a7dbb62f7a01fb14c789f64db265b4a39c'
   homepage 'https://github.com/akfidjeland/doxygen-torch'
   head 'https://github.com/akfidjeland/doxygen-torch.git'
 
