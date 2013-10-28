@@ -3,7 +3,7 @@
 require 'formula'
 
 class DoxygenTorch < Formula
-  url 'https://codeload.github.com/akfidjeland/doxygen-torch/tar.gz/v0.1.3'
+  url 'https://github.com/akfidjeland/doxygen-torch/archive/v0.1.3.tar.gz'
   version "0.1.3"
   sha1 '8c9bf1a7dbb62f7a01fb14c789f64db265b4a39c'
   homepage 'https://github.com/akfidjeland/doxygen-torch'
