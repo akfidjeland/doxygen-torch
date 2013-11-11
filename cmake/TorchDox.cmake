@@ -1,6 +1,6 @@
 MACRO(ADD_TORCH_DOX dstdir section title rank)
 
-    IF(DOXYGEN_FOUND AND LUA2DOX)
+    IF(DOXYGEN_FOUND AND LUA2DOX AND Torch_SOURCE_PKG_PATH)
 
         ADD_CUSTOM_TARGET(documentation-dox ALL COMMENT "Built documentation")
 
